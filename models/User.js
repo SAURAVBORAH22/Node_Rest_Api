@@ -42,7 +42,7 @@ const UserSchema = new mongoose.Schema({
         default: false
     }
 },
-    { timestamps: true }
+    { timestamps: true } //include createdAt and updatedAt fields
 );
 
 //exporting the UserSchema
