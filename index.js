@@ -26,6 +26,9 @@ const userRoute = require("./routes/users");
 //imporing authRoute
 const authRoute = require("./routes/auth");
 
+//imporing postRoute
+const postRoute = require("./routes/posts");
+
 
 //configuring dot env
 dotenv.config();
@@ -47,6 +50,8 @@ app.use(morgan("common")); //log requests
 app.use("/api/users",userRoute);
 //using auth route
 app.use("/api/auth",authRoute);
+//using post route
+app.use("/api/posts",postRoute);
 
 //making our app listen
 //used to listen on port 8800
