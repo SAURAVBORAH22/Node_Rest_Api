@@ -2,6 +2,8 @@
 const router = require('express').Router();
 //calling Post
 const Post = require('../models/Post');
+//calling User
+const User = require('../models/User');
 
 
 //create a post 
@@ -76,7 +78,7 @@ router.put('/:id/like', async (req, res) => {
             res.status(200).json("The post has been liked");
         }
         //else disliking the user
-        else{
+        else {
             await post.updateOne({ $pull: { likes: req.body.userId } });//req.body.title, req.body.content
             res.status(200).json("The post has been unliked");
         }
@@ -85,9 +87,44 @@ router.put('/:id/like', async (req, res) => {
     }
 });
 
+
+
 //get a post
+router.get('/:id', async (req, res) => {
+    //try catch
+    try {
+        //finding the post by id
+        const post = await Post.findById(req.params.id);
+        //status code
+        res.status(200).json(post);
+    } catch (err) {
+        res.status(500).json(err);//if error
+    }
+});
+
+
 
 //get timeline posts
+router.get('/timeline/all', async (req, res) => {
+    //try catch
+    try {
+        //finding the currentUser
+        const currentUser = await User.findById(req.body.userId);
+        //finding userPosts
+        const userPosts = await Post.find({ userId: currentUser._id });
+        //finding the friendPosts using map
+        const friendPosts = await Promise.all(
+            currentUser.followings.map((friendId) => {
+                return Post.find({ userId: friendId });
+            })
+        );
+
+        //merging the array
+        res.json(userPosts.concat(...friendPosts));
+    } catch (err) {
+        res.status(500).json(err);//if error
+    }
+});
 
 //exporting router
 module.exports = router;
