@@ -7,7 +7,7 @@ const router = require('express').Router();
 //calling bcrypt
 const bcrypt = require('bcrypt');
 
-//update users
+//u pdate users
 //putting id as async param
 router.put('/:id', async (req, res) => {
     //checking if userId is equal to logged in user or user is admin
