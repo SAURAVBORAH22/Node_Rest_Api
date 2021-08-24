@@ -64,10 +64,16 @@ router.delete('/:id', async (req, res) => {
 
 
 //get user
-router.get('/:id', async (req, res) => {
+router.get("/", async (req, res) => {
+    //creating a query for userId
+    const userId = req.query.userId; //getting the userId from the query
+    //creating a query for username
+    const username = req.query.username; // getting the username from the query
     //try to get the user
     try {
-        const user = await User.findById(req.params.id);//getting the user
+        const user = userId
+            ? await User.findById(userId)
+            : await User.findOne({ username: username });//getting the user
         //removing the unneeded fields
         const { password, updatedAt, ...other } = user._doc;
         //successful status
