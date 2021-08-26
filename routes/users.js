@@ -7,7 +7,7 @@ const router = require('express').Router();
 //calling bcrypt
 const bcrypt = require('bcrypt');
 
-//u pdate users
+//update users 
 //putting id as async param
 router.put('/:id', async (req, res) => {
     //checking if userId is equal to logged in user or user is admin
@@ -78,6 +78,29 @@ router.get("/", async (req, res) => {
         const { password, updatedAt, ...other } = user._doc;
         //successful status
         res.status(200).json(other);//returning the user
+    } catch (err) {
+        return res.status(500).json(err);//returning 500 if error
+    }
+});
+
+
+//get friends
+router.get("/friends/:userId", async (req, res) => {
+    //try and catch block
+    try {
+        const user = await user.findById(req.params.userId); //getting the user
+        const friends = await Promise.all( //getting all the friends
+            user.followings.map((friendId) => {
+                return User.findById(friendId); //getting the friend
+            })
+        );
+        //creating a friend list
+        let friendList = []; //creating an empty array
+        friends.map((friend) => { //iterating through the friends
+            const { _id, username, profilePicture } = friend; //getting the friend's id, username and profilePicture
+            friendList.push({ _id, username, profilePicture }); //adding the friend to the friendList
+        });
+        res.status(200).json(friendList); //returning the friendList
     } catch (err) {
         return res.status(500).json(err);//returning 500 if error
     }
