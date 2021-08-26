@@ -50,7 +50,7 @@ mongoose.connect(process.env.MONGO_URL,
 
 
 //using the images path
-app.use("/images",express.static(path.join(__dirname, 'public/images'))); //for images
+app.use("/images",express.static(path.join(__dirname, "public/images"))); //for images
 
 //middleware
 app.use(express.json()); //parse application/json
