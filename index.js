@@ -29,6 +29,12 @@ const authRoute = require("./routes/auth");
 //imporing postRoute
 const postRoute = require("./routes/posts");
 
+//imporing ConversationRoute
+const coversationRoute = require("./routes/conversations");
+
+//imporing MessageRoute
+const messageRoute = require("./routes/messages");
+
 //importing multer
 //used to upload files
 //https://www.npmjs.com/package/multer
@@ -50,7 +56,7 @@ mongoose.connect(process.env.MONGO_URL,
 
 
 //using the images path
-app.use("/images",express.static(path.join(__dirname, "public/images"))); //for images
+app.use("/images", express.static(path.join(__dirname, "public/images"))); //for images
 
 //middleware
 app.use(express.json()); //parse application/json
@@ -70,7 +76,7 @@ const storage = multer.diskStorage({ //store files on disk
     },
 });
 
-const upload = multer({storage: storage}); //upload files
+const upload = multer({ storage: storage }); //upload files
 
 //post request for uploading single file 
 app.post("/api/upload", upload.single("file"), (req, res) => {
@@ -88,6 +94,10 @@ app.use("/api/users", userRoute);
 app.use("/api/auth", authRoute);
 //using post route
 app.use("/api/posts", postRoute);
+//using conversation route
+app.use("/api/conversations", coversationRoute);
+//using message route
+app.use("/api/messages", messageRoute);
 
 //making our app listen
 //used to listen on port 8800
